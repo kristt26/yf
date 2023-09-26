@@ -13,7 +13,7 @@ class KeluargaModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id','nomor', 'wilayah_id', 'kerukunan_id', 'alamat', 'kontak', 'status_tinggal'];
+    protected $allowedFields    = ['id','nomor', 'wilayah_id', 'alamat', 'kontak', 'status_tinggal'];
 
     // Dates
     protected $useTimestamps = true;

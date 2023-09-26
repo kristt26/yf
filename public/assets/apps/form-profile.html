@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col">
+    <div class="col-md-6">
         <div class="form-group">
             <label for="nomor">Nomor Keluarga &nbsp;</label>
             <span style="color: red;" ng-show="signupform.nomor.$dirty && signupform.nomor.$invalid">
@@ -14,7 +14,7 @@
                 placeholder="Masukkan nomor keluarga" ng-minlength=1 maxlength=16 required>
         </div>
     </div>
-    <div class="col">
+    <div class="col-md-6">
         <div class="form-group">
             <label for="kel">Wilayah &nbsp;</label>
             <span style="color: red;" ng-show="signupform.kel.$dirty && signupform.kel.$invalid">
@@ -33,31 +33,14 @@
 
 </div>
 <div class="row">
-    <div class="col">
-        <div class="form-group">
-            <label for="kerukunan">Asal Kerukunan &nbsp;</label>
-            <span style="color: red;" ng-show="signupform.kerukunan.$dirty && signupform.kerukunan.$invalid">
-                <small class="" ng-show="signupform.kerukunan.$error.required">
-                    Kerukunan Dipilih.
-                </small>
-            </span>
-            <select name="kerukunan" id="kerukunan" ui-select2="select2Options"
-                class="form-control form-control-sm select2"
-                ng-options="item as item.kerukunan for item in datas.kerukunan track by item.kerukunan"
-                ng-model="kerukunan" ng-change="model.kerukunan_id=kerukunan.id; model.kerukunan=kerukunan.kerukunan"
-                required>
-                <option value=""></option>
-            </select>
-        </div>
-    </div>
-    <div class="col">
+    <div class="col-md-6">
         <div class="form-group">
             <label for="kontak">kontak/Hp &nbsp;</label>
             <input type="text" class="form-control form-control-sm" name="kontak" id="kontak" ng-model="model.kontak"
                 placeholder="Telepon Rumah" />
         </div>
     </div>
-    <div class="col">
+    <div class="col-md-6">
         <div class="form-group">
             <label for="status_tinggal">Status Tempat Tinggal &nbsp;</label>
             <span style="color: red;" ng-show="signupform.status_tinggal.$dirty && signupform.status_tinggal.$invalid">
@@ -102,24 +85,4 @@
         ng-disabled=signupform.$invalid ng-click="next()">
         Next <span class="mdi mdi-arrow-right-bold"></span>
     </a>
-</div>
-<div class="modal fade" id="addKerukunan" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Tambah Kerukunan</h5>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="kerukunan">Kerukunan</label>
-                    <input type="text" class="form-control" id="kerukunan" ng-model="dataRukun.kerukunan"
-                        placeholder="Nama Kerukunan" capitalize>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-sm" ng-click="hideModel()">Close</button>
-                <button type="button" class="btn btn-primary btn-sm" ng-click="saveKerukunan()">Tambah</button>
-            </div>
-        </div>
-    </div>
 </div>

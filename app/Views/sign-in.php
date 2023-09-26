@@ -20,7 +20,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>IKT Jayapura</title>
+    <title>YOLLEUW FAMILY</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="title" content="Volt Premium Bootstrap Dashboard - Sign in page">
     <meta name="author" content="Themesberg">
@@ -71,10 +71,10 @@
         <section class="vh-lg-100 mt-5 mt-lg-0 d-flex align-items-center">
             <div class="container">
                 <div class="text-center">
-                    <img src="<?= base_url('temp') ?>/assets/images/IKT.png" alt="" width="12%">
+                    <img src="<?= base_url('temp') ?>/assets/images/logo.png" alt="" width="12%">
                 </div>
                 <h4 class="d-flex align-items-center justify-content-center text-center">
-                    Sistem Pendataan Anggota IKT
+                    Sistem Pendataan Anggota Keluarga
                 </h4>
                 <div class="row justify-content-center">
                     <div class="col-12 d-flex align-items-center justify-content-center">

@@ -66,11 +66,11 @@
                         <thead>
                             <tr>
                                 <th>No</th>
+                                <th>Jenis Identitas</th>
                                 <th>NIK</th>
                                 <th>Nama</th>
                                 <th>Hubungan Keluarga</th>
-                                <th>Tempat Lahir</th>
-                                <th>Tanggal Lahir</th>
+                                <th>TTL</th>
                                 <th>Jenis Kelamin</th>
                                 <th>Golongan Darah</th>
                                 <th>Agama</th>
@@ -81,11 +81,11 @@
                         <tbody>
                             <tr ng-repeat="item in model.anggota">
                                 <td>{{$index+1}}</td>
-                                <td>{{item.nik}}</td>
+                                <td>{{item.jenis_identitas}}</td>
+                                <td>{{item.nomor_identitas}}</td>
                                 <td>{{item.nama}}</td>
                                 <td>{{item.hubungan_keluarga}}</td>
-                                <td>{{item.tempat_lahir}}</td>
-                                <td>{{item.tanggal_lahir}}</td>
+                                <td>{{item.tempat_lahir}}, {{item.tanggal_lahir}} </td>
                                 <td>{{item.gender}}</td>
                                 <td>{{item.golongan_darah}}</td>
                                 <td>{{item.agama}}</td>

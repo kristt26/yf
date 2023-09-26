@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Pendataan IKT</title>
+    <title>YOLLEUW FAMILY</title>
     <link rel="stylesheet" href="<?= base_url('temp') ?>/assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="<?= base_url('temp') ?>/assets/vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="<?= base_url('temp') ?>/assets/css/style.css">
@@ -30,8 +30,8 @@
         <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
                 <!-- <a class="navbar-brand brand-logo" href="<?= base_url() ?>"><img src="<?= base_url('temp') ?>/assets/images/logo-spenja.png" alt="logo" /></a> -->
-                <a class="navbar-brand brand-logo" href=""><img src="<?= base_url('temp') ?>/assets/images/logoIKT.png" alt="logo" /></a>
-                <a class="navbar-brand brand-logo-mini" href="<?= base_url() ?>"><img src="<?= base_url('temp') ?>/assets/images/IKT.png" alt="logo" /></a>
+                <a class="navbar-brand brand-logo" href=""><img src="<?= base_url('temp') ?>/assets/images/logo.png" alt="logo" /></a>
+                <a class="navbar-brand brand-logo-mini" href="<?= base_url() ?>"><img src="<?= base_url('temp') ?>/assets/images/logo.png" alt="logo" /></a>
             </div>
             <div class="navbar-menu-wrapper d-flex align-items-stretch">
                 <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">

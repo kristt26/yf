@@ -13769,7 +13769,7 @@ dl {
       .navbar .navbar-brand-wrapper .navbar-brand:active, .navbar .navbar-brand-wrapper .navbar-brand:focus, .navbar .navbar-brand-wrapper .navbar-brand:hover {
         color: #1b2658; }
       .navbar .navbar-brand-wrapper .navbar-brand img {
-        width: calc(273px - 79px);
+        width: calc(273px - 124px);
         max-width: 100%;
         height: 57px;
         margin: auto;

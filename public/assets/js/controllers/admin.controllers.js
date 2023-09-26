@@ -1,7 +1,6 @@
 angular.module('adminctrl', [])
     // Admin
     .controller('dashboardController', dashboardController)
-    .controller('kerukunanController', kerukunanController)
     .controller('detailKeluargaController', detailKeluargaController)
     .controller('anggotaController', anggotaController)
     .controller('anggotaUltahController', anggotaUltahController)
@@ -24,53 +23,6 @@ function dashboardController($scope, dashboardServices) {
     // })
 }
 
-function kerukunanController($scope, kerukunanServices, pesan) {
-    $scope.$emit("SendUp", "Pembobotan Faktor");
-    $scope.datas = {};
-    $scope.model = {};
-    $.LoadingOverlay("show");
-    kerukunanServices.get().then((res) => {
-        $scope.datas = res;
-        $.LoadingOverlay("hide");
-    })
-
-    $scope.setInisial = (item) => {
-        $scope.model.inisial = item.substring(0, 3).toUpperCase();
-    }
-
-    $scope.save = () => {
-        pesan.dialog('Yakin ingin?', 'Yes', 'Tidak').then(res => {
-            $.LoadingOverlay("show");
-            if ($scope.model.id) {
-                kerukunanServices.put($scope.model).then(res => {
-                    $scope.model = {};
-                    $.LoadingOverlay("hide");
-                    pesan.Success("Berhasil mengubah data");
-                })
-            } else {
-                kerukunanServices.post($scope.model).then(res => {
-                    $scope.model = {};
-                    $.LoadingOverlay("hide");
-                    pesan.Success("Berhasil menambah data");
-                })
-            }
-        })
-    }
-
-    $scope.edit = (item) => {
-        $scope.model = angular.copy(item);
-    }
-
-    $scope.delete = (param) => {
-        pesan.dialog('Yakin ingin?', 'Ya', 'Tidak').then(res => {
-            $.LoadingOverlay("show");
-            kerukunanServices.deleted(param).then(res => {
-                $.LoadingOverlay("hide");
-                pesan.Success("Berhasil menghapus data");
-            })
-        });
-    }
-}
 
 function detailKeluargaController($scope, keluargaServices, pesan, helperServices) {
     $scope.$emit("SendUp", "Pembobotan Faktor");

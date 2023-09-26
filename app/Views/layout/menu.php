@@ -21,60 +21,17 @@
         </li>
         <?php if (session()->get('level') == 'Admin') : ?>
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-                    <span class="menu-title">Master Data </span>
-                    <i class="menu-arrow"></i>
-                    <i class="mdi mdi-database menu-icon"></i>
+                <a class="nav-link" href="<?= base_url('keluarga') ?>">
+                    <span class="menu-title">Keluarga</span>
+                    <i class="mdi mdi-human-male-boy menu-icon"></i>
                 </a>
-                <div class="collapse" id="ui-basic">
-                    <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"> <a class="nav-link" href="<?= base_url('kerukunan') ?>">Kerukunan</a>
-                        </li>
-                        <!-- <li class="nav-item"> <a class="nav-link" href="<?= base_url('ksp') ?>">KSP</a></li>
-                        <li class="nav-item"> <a class="nav-link" href="<?= base_url('manajemen_user') ?>">Manajemen User</a></li>
-                        <li class="nav-item"> <a class="nav-link" href="<?= base_url('persyaratan') ?>">Persyaratan</a></li> -->
-                    </ul>
-                </div>
-            </li>
+            </li> 
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="collapse" href="#administrasi-jemaat" aria-expanded="false" aria-controls="administrasi-jemaat">
-                    <span class="menu-title">Administrasi</span>
-                    <i class="menu-arrow"></i>
-                    <i class="mdi mdi-view-list menu-icon"></i>
+                <a class="nav-link" href="<?= base_url('anggota') ?>">
+                    <span class="menu-title">Anggota Keluarga</span>
+                    <i class="mdi mdi-human-male menu-icon"></i>
                 </a>
-                <div class="collapse" id="administrasi-jemaat">
-                    <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"> <a class="nav-link" href="<?= base_url('keluarga') ?>">Keluarga</a>
-                        </li>
-                        <li class="nav-item"> <a class="nav-link" href="<?= base_url('anggota') ?>">Anggota IKT</a></li>
-                        <!-- <li class="nav-item"> <a class="nav-link" href="<?= base_url('mutasi') ?>">Mutasi Jemaat</a></li> -->
-                    </ul>
-                </div>
-            </li>
-            <!-- <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="collapse" href="#pelayanan" aria-expanded="false" aria-controls="pelayanan">
-                    <span class="menu-title">Pelayanan<sup ng-if="menuLayanan > 0"><span class="badge bg-danger" style="border-radius: 1.125rem; padding: 0.3rem !important;">{{menuLayanan}}</span></sup></span>
-                    <i class="menu-arrow"></i>
-                    <i class="mdi mdi-webhook menu-icon"></i>
-                </a>
-                <div class="collapse" id="pelayanan">
-                    <ul class="nav flex-column sub-menu">
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('manajemen_baptis') ?>">Baptis
-                                <sup ng-if="(layanan.baptis) > 0"><span class="badge bg-warning" style="border-radius: 1.125rem; padding: 0.3rem !important;">{{layanan.baptis}}</span></sup>
-                            </a>
-                        </li>
-                        <li class="nav-item"> <a class="nav-link" href="<?= base_url('manajemen_sidi') ?>">Sidi
-                                <sup ng-if="(layanan.sidi) > 0"><span class="badge bg-warning" style="border-radius: 1.125rem; padding: 0.3rem !important;">{{layanan.sidi}}</span></sup>
-                            </a>
-                        </li>
-                        <li class="nav-item"><a class="nav-link" href="<?= base_url('manajemen_nikah') ?>">Nikah
-                                <sup ng-if="(layanan.nikah) > 0"><span class="badge bg-warning" style="border-radius: 1.125rem; padding: 0.3rem !important;">{{layanan.nikah}}</span></sup>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li> -->
+            </li> 
             <li class="nav-item">
                 <a class="nav-link" href="<?= base_url('laporan') ?>">
                     <span class="menu-title">Laporan</span>

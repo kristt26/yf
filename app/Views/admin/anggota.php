@@ -21,7 +21,8 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Aksi</th>
-                                    <th>NIK</th>
+                                    <th>Jenis Identitas</th>
+                                    <th>Nomor Identitas</th>
                                     <th>Nama</th>
                                     <th>Jenis Kelamin</th>
                                     <th>Tempat Lahir</th>
@@ -31,6 +32,10 @@
                                     <th>Hubungan Keluarga</th>
                                     <th>Pendidikan</th>
                                     <th>Pekerjaan</th>
+                                    <th>Instansi</th>
+                                    <th>Jabatan</th>
+                                    <th>Kontak</th>
+                                    <th>Nomor Akta</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -73,7 +78,10 @@
                     ordering: false
                 },
                 {
-                    data: 'nik',
+                    data: 'jenis_identitas',
+                },
+                {
+                    data: 'nomor_identitas',
                 },
                 {
                     data: 'nama'
@@ -107,7 +115,19 @@
                 },
                 {
                     data: 'pekerjaan'
-                }
+                },
+                {
+                    data: 'instansi'
+                },
+                {
+                    data: 'jabatan'
+                },
+                {
+                    data: 'hp'
+                },
+                {
+                    data: 'nomor_akte'
+                },
             ],
         }).columns.adjust();
     });

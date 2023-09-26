@@ -12,7 +12,6 @@ class Keluarga extends BaseController
     protected $keluarga;
     protected $anggota;
     protected $anggotaKK;
-    protected $kerukunan;
     protected $wilayah;
     protected $conn;
     protected $decode;
@@ -21,7 +20,6 @@ class Keluarga extends BaseController
         $this->keluarga = new \App\Models\KeluargaModel();
         $this->anggota = new \App\Models\AnggotaModel();
         $this->anggotaKK = new \App\Models\AnggotaKeluargaModel();
-        $this->kerukunan = new \App\Models\KerukunanModel();
         $this->wilayah = new \App\Models\WilayahModel();
         $this->conn = \Config\Database::connect();
         $this->decode = new \App\Libraries\Decode();
@@ -43,16 +41,14 @@ class Keluarga extends BaseController
                     ON keluarga.nomor = dup.nomor
             ")->getResult();
         $data['keluarga'] = $this->anggota
-            ->select("keluarga.*, wilayah.wilayah, kerukunan.kerukunan, anggota.nama")
+            ->select("keluarga.*, wilayah.wilayah, anggota.nama")
             ->join("anggota_keluarga", "anggota_keluarga.anggota_id = anggota.id", "left")
             ->join("keluarga", "keluarga.id = anggota_keluarga.keluarga_id", "left")
             ->join("wilayah", "wilayah.id = keluarga.wilayah_id", "left")
-            ->join("kerukunan", "kerukunan.id = keluarga.kerukunan_id", "left")
             ->where("hubungan_keluarga", "KEPALA KELUARGA")
             ->where("keluarga.deleted_at", null)
             ->findAll();
         $data['wilayah'] = $this->wilayah->findAll();
-        $data['kerukunan'] = $this->kerukunan->findAll();
         return $this->respond($data);
     }
 
@@ -65,6 +61,7 @@ class Keluarga extends BaseController
             $this->keluarga->insert($data);
             $data->id = $this->keluarga->getInsertID();
             foreach ($data->anggota as $key => $value) {
+                $value->foto = isset($value->berkas) ? $this->decode->decodebase64($value->berkas->base64) : null;
                 $value->id = $this->decode->uid();
                 $this->anggota->insert($value);
                 $this->anggotaKK->insert(['keluarga_id' => $data->id, 'anggota_id' => $value->id]);
@@ -104,9 +101,12 @@ class Keluarga extends BaseController
             }
             foreach ($data->anggota as $key => $value) {
                 if (isset($value->id)) {
+                    $value->foto = isset($value->berkas) ? $this->decode->decodebase64($value->berkas->base64) : $value->foto;
                     $this->anggota->update($value->id, $value);
+
                 } else {
                     $value->id = $this->decode->uid();
+                    $value->foto = isset($value->berkas) ? $this->decode->decodebase64($value->berkas->base64) : null;
                     $this->anggota->insert($value);
                     $value->id = $this->anggota->getInsertID();
                     $this->anggotaKK->insert(['keluarga_id' => $data->id, 'anggota_id' => $value->id]);
@@ -151,27 +151,14 @@ class Keluarga extends BaseController
     public function getDetail($id)
     {
         $data = $this->keluarga->asObject()
-        ->select("keluarga.*, wilayah.wilayah, kerukunan.kerukunan")
+        ->select("keluarga.*, wilayah.wilayah")
         ->join("wilayah", "wilayah.id=keluarga.wilayah_id")
-        ->join("kerukunan", "kerukunan.id=keluarga.kerukunan_id")
         ->where("keluarga.id", $id)->first();
         $data->anggota = $this->anggota
             ->select("anggota.*")
             ->join('anggota_keluarga', 'anggota_keluarga.anggota_id=anggota.id')
             ->where('anggota.deleted_at', null)
             ->where('keluarga_id', $id)->findAll();
-        return $this->respond($data);
-    }
-
-    public function getById($id)
-    {
-        $data = $this->kk->getDetail($id);
-        $data->anggota = $this->anggota->asObject()->getById($id);
-        foreach ($data->anggota as $key => $anggota) {
-            $anggota->baptis = $this->baptis->WHERE('anggotakk_id', $anggota->id)->first();
-            $anggota->sidi = $this->sidi->WHERE('anggotakk_id', $anggota->id)->first();
-            $anggota->nikah = $this->nikah->WHERE('anggotakk_id', $anggota->id)->first();
-        }
         return $this->respond($data);
     }
 

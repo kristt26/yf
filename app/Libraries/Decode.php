@@ -64,7 +64,7 @@ class Decode
     }
     public function decodebase64($base64)
     {
-        $target_dir = 'assets/berkas/'; // add the specific path to save the file
+        $target_dir = 'assets/foto/'; // add the specific path to save the file
         $decoded_file = base64_decode($base64); // decode the file
         $mime_type = finfo_buffer(finfo_open(), $decoded_file, FILEINFO_MIME_TYPE); // extract mime type
         $extension = $this->mime2ext($mime_type); // extract extension from mime type

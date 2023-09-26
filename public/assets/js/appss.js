@@ -163,12 +163,7 @@ function formController($scope, helperServices, keluargaServices, wilayahService
     $scope.tambahAnggota = false;
     $scope.statusEdit = false;
     $scope.dtOptions = DTOptionsBuilder.newOptions().withOption('scrollX', '100%');
-    setTimeout(() => {
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
-        })
-    }, 300);
+    $scope.photo = "https://bootdey.com/img/Content/avatar/avatar1.png";
     
     $scope.select2Options = {
         allowClear: true,
@@ -197,7 +192,6 @@ function formController($scope, helperServices, keluargaServices, wilayahService
             $.LoadingOverlay("hide");
             $scope.provinsi = res;
             $scope.model = JSON.parse(window.localStorage.getItem('biodata'));
-            $scope.kerukunan = $scope.datas.kerukunan.find(x => x.id == $scope.model.kerukunan_id);
             $scope.kel = $scope.datas.wilayah.find(x => x.id == $scope.model.wilayah_id);
             var lastPath = helperServices.lastPath;
             if (lastPath == "data") {
@@ -220,24 +214,26 @@ function formController($scope, helperServices, keluargaServices, wilayahService
     $scope.hideModel =()=>{
         $("#addKerukunan").modal('hide');
     }
+    $scope.openFile = () => {
+        $("input[id='my_file']").click();
+    }
 
-    $scope.saveKerukunan = ()=>{
-        $.LoadingOverlay("show");
-        keluargaServices.addKerukunan($scope.dataRukun).then(res=>{
-            pesan.Success("Proses Berhasil");
-            $scope.datas.kerukunan.push(res);
-            $scope.dataRukun = {};
-            $("#addKerukunan").modal('hide');
-            $.LoadingOverlay("hide");
-        })
+    $scope.uploadFoto = (param) => {
+        console.log(param);
+        // $.LoadingOverlay('show');
+        // console.log(param);
+        // profileServices.upload(param).then(res => {
+        //     pesan.Success("Proses berhasil");
+        //     setTimeout(() => {
+        //         document.location.href = helperServices.url + "auth";
+        //     }, 500);
+        //     $.LoadingOverlay('hide');
+        // })
     }
 
     $scope.setTambah = (item) => {
         $scope.tambahAnggota = item;
         $scope.itemAnggota = {};
-        $scope.baptis = {};
-        $scope.sidi = {};
-        $scope.nikah = {};
     }
 
     $scope.tambah = () => {
@@ -248,27 +244,14 @@ function formController($scope, helperServices, keluargaServices, wilayahService
     }
 
     $scope.addAnggota = () => {
-        $scope.itemAnggota.tanggal_lahir = helperServices.dateToString($scope.itemAnggota.tanggal_lahir);
-        $scope.baptis.tanggal_baptis ? $scope.baptis.tanggal_baptis = helperServices.dateToString($scope.baptis.tanggal_baptis) : undefined;
-        $scope.sidi.tanggal_sidi ? $scope.sidi.tanggal_sidi = helperServices.dateToString($scope.sidi.tanggal_sidi) : undefined;
-        $scope.nikah.tanggal_nikah ? $scope.nikah.tanggal_nikah = helperServices.dateToString($scope.nikah.tanggal_nikah) : undefined;
-        $scope.itemAnggota.baptis = $scope.baptis;
-        $scope.itemAnggota.sidi = $scope.sidi;
-        $scope.itemAnggota.nikah = $scope.nikah;
+        if(typeof stringValue != "string") $scope.itemAnggota.tanggal_lahir = helperServices.dateToString($scope.itemAnggota.tanggal_lahir);
         if (!$scope.statusEdit) {
             if (!$scope.model.anggota) {
                 $scope.model.anggota = [];
             }
             $scope.model.anggota.push(angular.copy($scope.itemAnggota));
-        } else {
-            $scope.itemAnggota.baptis.anggotakk_id = $scope.itemAnggota.id;
-            $scope.itemAnggota.sidi.anggotakk_id = $scope.itemAnggota.id;
-            $scope.itemAnggota.nikah.anggotakk_id = $scope.itemAnggota.id;
         }
         $scope.itemAnggota = {};
-        $scope.baptis = {};
-        $scope.sidi = {};
-        $scope.nikah = {};
         $scope.tambahAnggota = false;
         $scope.statusEdit = false;
     }
@@ -280,17 +263,13 @@ function formController($scope, helperServices, keluargaServices, wilayahService
 
     $scope.editAnggota = (item) => {
         $scope.itemAnggota = item;
-        $scope.baptis = $scope.itemAnggota.baptis
-        $scope.sidi = $scope.itemAnggota.sidi
-        $scope.nikah = $scope.itemAnggota.nikah
-        !$scope.baptis ? $scope.baptis = {} : false;
-        !$scope.sidi ? $scope.sidi = {} : false;
-        !$scope.nikah ? $scope.nikah = {} : false;
         $scope.itemAnggota.tanggal_lahir = new Date($scope.itemAnggota.tanggal_lahir);
-        $scope.baptis.tanggal_baptis ? $scope.baptis.tanggal_baptis = new Date($scope.baptis.tanggal_baptis) : undefined;
-        $scope.sidi.tanggal_sidi ? $scope.sidi.tanggal_sidi = new Date($scope.sidi.tanggal_sidi) : undefined;
-        $scope.nikah.tanggal_nikah ? $scope.nikah.tanggal_nikah = new Date($scope.nikah.tanggal_nikah) : undefined;
         $scope.tambahAnggota = true;
+        if(item.foto){
+            $scope.photo = helperServices.url + "assets/foto/" + item.foto;
+        }else{
+            $scope.photo = "https://bootdey.com/img/Content/avatar/avatar1.png";
+        }
         $scope.statusEdit = true;
     }
 

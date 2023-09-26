@@ -14,7 +14,7 @@ class AnggotaModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id', 'nik', 'nama', 'tempat_lahir', 'tanggal_lahir', 'gender', 'golongan_darah', 'status_kawin', 'agama', 'hubungan_keluarga', 'pendidikan_terakhir', 'pekerjaan'];
+    protected $allowedFields    = ['id', 'jenis_identitas', 'nomor_identitas', 'nama', 'tempat_lahir', 'tanggal_lahir', 'gender', 'golongan_darah', 'status_perkawinan', 'agama', 'hubungan_keluarga', 'pendidikan_terakhir', 'pekerjaan', 'jabatan', 'instansi', 'alamat_kantor', 'hobby', 'hp', 'foto', 'nomor_akta'];
 
     // Dates
     protected $useTimestamps = true;
