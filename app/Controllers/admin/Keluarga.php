@@ -164,9 +164,8 @@ class Keluarga extends BaseController
 
     public function cetak($id)
     {
-        $data = $this->keluarga->select("keluarga.*, wilayah.wilayah, kerukunan.kerukunan")
+        $data = $this->keluarga->select("keluarga.*, wilayah.wilayah")
             ->join('wilayah', 'wilayah.id=keluarga.wilayah_id', 'left')
-            ->join('kerukunan', 'kerukunan.id=keluarga.kerukunan_id', 'left')
             ->where('keluarga.id', $id)->first();
         $data['anggota'] = $this->anggotaKK->select('anggota.*')
             ->join('anggota', 'anggota.id=anggota_keluarga.anggota_id')
@@ -178,11 +177,10 @@ class Keluarga extends BaseController
     {
         $param = $this->request->getGet();
         $data = $this->anggota
-        ->select("keluarga.*, wilayah.wilayah, kerukunan.kerukunan, anggota.nama")
+        ->select("keluarga.*, wilayah.wilayah, anggota.nama")
         ->join("anggota_keluarga", "anggota_keluarga.anggota_id = anggota.id", "left")
         ->join("keluarga", "keluarga.id = anggota_keluarga.keluarga_id", "left")
         ->join("wilayah", "wilayah.id = keluarga.wilayah_id", "left")
-        ->join("kerukunan", "kerukunan.id = keluarga.kerukunan_id", "left")
         ->where("hubungan_keluarga", "KEPALA KELUARGA")
         ->where("keluarga.deleted_at", null)
         ->findAll();

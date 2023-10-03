@@ -106,52 +106,30 @@ function anggotaController($scope, $compile, anggotaServices, keluargaServices, 
     }
 }
 
-function anggotaUltahController($scope, anggotaServices, wijkServices, helperServices, pesan, DTOptionsBuilder) {
+function anggotaUltahController($scope, anggotaServices, helperServices, pesan, DTOptionsBuilder) {
     $scope.$emit("SendUp", "Data Anggota");
     $scope.datas = {};
-    var lastKK = "";
-    var no = 1;
     $scope.tanggal = moment().add(1, 'weeks').startOf('isoWeek').add(-1, "days").format("YYYY/MM/DD") + " - " + moment().add(1, 'weeks').endOf('isoWeek').add(-1, 'days').format("YYYY/MM/DD");
     $scope.dtOptions = DTOptionsBuilder.newOptions().withOption('scrollX', '100%');
-    $.LoadingOverlay("show");
-    $scope.init = () => {
-        // $scope.setDate();
-        wijkServices.get().then(res => {
-            $scope.wijks = res;
+    // $.LoadingOverlay("show");
+    $scope.setDate = (tanggal) => {
+        $.LoadingOverlay("show");
+        var arr = tanggal.split(' - ');
+        arr[0] = arr[0].split("/").join("-");
+        arr[1] = arr[1].split("/").join("-");
+        let item = { date: arr};
+        anggotaServices.getUltah(item).then(res => {
+            $scope.datas = res;
+            console.log(res);
             $.LoadingOverlay("hide");
         })
-        // setTimeout(() => {
-        //     $scope.setDate();        
-        // }, 500);
-    }
-    $scope.setDate = (tanggal, jenis, wijk_id) => {
-        if (tanggal && jenis && wijk_id) {
-            $.LoadingOverlay("show");
-            var arr = tanggal.split(' - ');
-            arr[0] = arr[0].split("/").join("-");
-            arr[1] = arr[1].split("/").join("-");
-            let item = { date: arr, jenis: jenis, wijk_id: wijk_id };
-            anggotaServices.getUltah(item).then(res => {
-                if (jenis == '1') {
-                    $scope.datas = res;
-                } else {
-                    $scope.datas = res.filter((x) => x.hubungan_keluarga == 'KEPALA KELUARGA' || x.hubungan_keluarga == 'SUAMI');
-                }
-                $.LoadingOverlay("hide");
-            })
-        }
     }
 
-    $scope.cetak = (tanggal, jenis, wijk_id) => {
-        if (tanggal, jenis, wijk_id) {
-            var arr = tanggal.split(' - ');
-            arr[0] = arr[0].split("/").join("-");
-            arr[1] = arr[1].split("/").join("-");
-            var item = helperServices.url + 'laporan/excel?item=' + helperServices.enkrip("ulangTahun") + "&start=" + arr[0] + "&end=" + arr[1] + "&jenis=" + jenis + "&wijk_id=" + wijk_id;
-            window.open(helperServices.url + 'laporan/excel?item=' + helperServices.enkrip("ulangTahun") + "&start=" + arr[0] + "&end=" + arr[1] + "&jenis=" + jenis + "&wijk_id=" + wijk_id, "_blank");
-        } else {
-            pesan.error("Tidak ada data");
-        }
+    $scope.cetak = (tanggal) => {
+        var arr = tanggal.split(' - ');
+        arr[0] = arr[0].split("/").join("-");
+        arr[1] = arr[1].split("/").join("-");
+        window.open(helperServices.url + 'laporan/print?item=' + helperServices.enkrip("ulangTahun")+ "&start=" + arr[0] + "&end=" + arr[1], "_blank");
     }
 }
 
@@ -166,11 +144,16 @@ function addAnggotaController($scope, anggotaServices, helperServices, keluargaS
     $scope.hubungan = helperServices.hubungan;
     $scope.pendidikan = helperServices.pendidikan;
     $scope.pekerjaan = helperServices.pekerjaan;
+    $scope.photo = "https://bootdey.com/img/Content/avatar/avatar1.png";
     keluargaServices.getId(helperServices.lastPath).then((res) => {
         $scope.datas = res;
         $scope.kepalaKeluarga = res.anggota.find(x => x.hubungan_keluarga == 'KEPALA KELUARGA');
         $scope.model.keluarga_id = res.id;
     });
+
+    $scope.openFile = () => {
+        $("input[id='my_file']").click();
+    }
 
     $scope.save = () => {
         $scope.model.baptis = $scope.baptis;
@@ -212,8 +195,17 @@ function editAnggotaController($scope, anggotaServices, helperServices, pesan) {
         $scope.datas = res.kk;
         $scope.kepalaKeluarga = res.kk.anggota;
         $scope.model = res.anggota;
+        $scope.photo = helperServices.url + "assets/foto/" + $scope.model.foto;
         $scope.model.tanggal_lahir = new Date($scope.model.tanggal_lahir);
     });
+
+    $scope.openFile = () => {
+        $("input[id='my_file']").click();
+    }
+
+    // $scope.uploadFoto = (param)=>{
+    //     console.log(param);
+    // }
 
     $scope.save = () => {
         pesan.dialog("Yakin ingin melanjutkan?", "Ya", "Tidak").then(x => {
@@ -243,11 +235,8 @@ function golonganDarahController($scope, anggotaServices, helperServices, pesan,
     }
 
     $scope.cetak = (param) => {
-        if (param) {
-            window.open(helperServices.url + 'laporan/golongan_darah_excel?darah=' + helperServices.enkrip(param), "_blank");
-        } else {
-            pesan.error("Tidak ada data");
-        }
+        window.open(helperServices.url + 'laporan/print?item=' + helperServices.enkrip("golonganDarah")+"&darah="+helperServices.enkrip(param), "_blank");
+        //  
     }
 }
 

@@ -15,7 +15,7 @@
         <div class="col-12 mb-4">
             <table>
                 <tr>
-                    <td class="text-center" style="font-size:16px"><strong>IKATAN KELUARGA TORAJA (IKT) <br> KOTA JAYAPURA
+                    <td class="text-center" style="font-size:16px"><strong>YOLLEUW FAMILY <br> DAFTAR KELUARGA
                     </td>
                 </tr>
             </table>
@@ -28,7 +28,6 @@
                         <th class="text-center">Nomor Keluarga</th>
                         <th class="text-center">Kepala Keluarga</th>
                         <th class="text-center">Wilayah</th>
-                        <th class="text-center">Kerukunan</th>
                         <th class="text-center">Alamat</th>
                         <th class="text-center">Kontak</th>
                         <th class="text-center">Status Tinggal</th>
@@ -41,7 +40,6 @@
                             <td><?= $value['nomor'] ?></td>
                             <td><?= $value['nama'] ?></td>
                             <td><?= $value['wilayah'] ?></td>
-                            <td><?= $value['kerukunan'] ?></td>
                             <td><?= $value['alamat'] ?></td>
                             <td><?= $value['kontak'] ?></td>
                             <td><?= $value['status_tinggal'] ?></td>

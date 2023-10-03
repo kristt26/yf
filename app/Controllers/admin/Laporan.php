@@ -19,7 +19,6 @@ class Laporan extends BaseController
     protected $anggota;
     protected $anggotaKeluarga;
     protected $wilayah;
-    protected $kerukunan;
     protected $conn;
     protected $lastKK;
     protected $no;
@@ -29,7 +28,6 @@ class Laporan extends BaseController
         $this->anggota = new \App\Models\AnggotaModel();
         $this->anggotaKeluarga = new \App\Models\AnggotaKeluargaModel();
         $this->wilayah = new \App\Models\WilayahModel();
-        $this->kerukunan = new \App\Models\KerukunanModel();
         $this->conn = \Config\Database::connect();
         $this->lastKK = "";
         $this->no = 1;
@@ -41,6 +39,7 @@ class Laporan extends BaseController
         $list['lists'] = [
             ["url" => enkrip("kepalaKeluarga"), "text" => "Keluarga"],
             ["url" => enkrip("golonganDarah"), "text" => "Golongan Darah"],
+            ["url" => enkrip("ulangTahun"), "text" => "Ulang Tahun"],
             // ["url" => enkrip("disabilitas"), "text" => "Disabilitas"],
             // ["url" => enkrip("narkoba"), "text" => "Nakoba"],
             // ["url" => enkrip("nikahGereja"), "text" => "Nikah Gereja"],
@@ -55,6 +54,10 @@ class Laporan extends BaseController
             $list['title'] = "Golongan Darah";
             $list['url'] = enkrip("golonganDarah");
             return view('admin/laporan/golongan_darah', $list);
+        } else if (dekrip($setItem) == "ulangTahun") {
+            $list['title'] = "Ulang Tahun";
+            $list['url'] = enkrip("ulangTahun");
+            return view('admin/laporan/ulang_tahun', $list);
         }
         // else if (dekrip($setItem) == "disabilitas") {
         //     $list['title'] = "Disabilitas";
@@ -95,40 +98,83 @@ class Laporan extends BaseController
     {
         $setItem = $this->request->getGet("item");
         if (is_null($setItem)) {
-            $list['title'] = "";
-            return view('admin/laporan/index', $list);
-        } else if (dekrip($setItem) == "layakBaptis") {
-            $list['title'] = "Baptis";
-            if (dekrip($this->request->getGet("set_status")) == 'belum') {
-                $data['anggota'] = $this->anggota->layak_baptis(session()->get("jemaat_id"), dekrip($this->request->getGet("wijk")))->orderBy('wijk, umur', 'ACS')->get()->getResultArray();
-                $data['setStatus'] = 'belum';
-            } else {
-                $data['anggota'] = $this->anggota->sudah_baptis(session()->get("jemaat_id"), dekrip($this->request->getGet("wijk")))->orderBy('wijk, umur', 'ACS')->get()->getResultArray();
-                $data['setStatus'] = 'sudah';
-            }
-            return view('admin/laporan/cetak_baptis', $data);
-        } else if (dekrip($setItem) == "layakSidi") {
-            $list['title'] = "SIDI";
-            if (dekrip($this->request->getGet("set_status")) == 'belum') {
-                $data['anggota'] = $this->anggota->layak_sidi(session()->get("jemaat_id"), dekrip($this->request->getGet("wijk")))->orderBy('wijk, umur', 'ACS')->get()->getResultArray();
-                $data['setStatus'] = 'belum';
-            } else {
-                $data['anggota'] = $this->anggota->sudah_sidi(session()->get("jemaat_id"), dekrip($this->request->getGet("wijk")))->orderBy('wijk, umur', 'ACS')->get()->getResultArray();
-                $data['setStatus'] = 'sudah';
-            }
-            return view('admin/laporan/cetak_sidi', $data);
+            $data['anggota'] = $this->anggota->findAll();
+            $data['judul'] = "";
+            return view('admin/laporan/cetak_anggota', $data);
         } else if (dekrip($setItem) == "kepalaKeluarga") {
+            $id = $this->request->getGet('id');
             $param = $this->request->getGet();
             // dd($param);
             $list['title'] = "Kepala Keluarga";
-            $data['anggota'] = $this->anggota
-                ->select("keluarga.*, anggota_keluarga.keluarga_id, anggota.nama, wilayah.wilayah, kerukunan.kerukunan")
+            if (is_null($id)) {
+                $data['anggota'] = $this->anggota
+                    ->select("keluarga.*, anggota_keluarga.keluarga_id, anggota.nama, wilayah.wilayah")
+                    ->join("anggota_keluarga", "anggota_keluarga.anggota_id=anggota.id", "left")
+                    ->join("keluarga", "anggota_keluarga.keluarga_id=keluarga.id", "left")
+                    ->join("wilayah", "wilayah.id=keluarga.wilayah_id", "left")
+                    ->where('hubungan_keluarga', "KEPALA KELUARGA")
+                    ->findAll();
+            } else {
+                $data['anggota'] = $this->anggota
+                    ->select("keluarga.*, anggota_keluarga.keluarga_id, anggota.nama, wilayah.wilayah")
+                    ->join("anggota_keluarga", "anggota_keluarga.anggota_id=anggota.id", "left")
+                    ->join("keluarga", "anggota_keluarga.keluarga_id=keluarga.id", "left")
+                    ->join("wilayah", "wilayah.id=keluarga.wilayah_id", "left")
+                    ->where('hubungan_keluarga', "KEPALA KELUARGA")
+                    ->where('wilayah_id', dekrip($id))
+                    ->findAll();
+            }
+            $data['id'] = $id;
+            return view('admin/laporan/cetak_kepala_keluarga', $data);
+        } else if (dekrip($setItem) == "pekerjaan") {
+            $param = $this->request->getGet("pekerjaan");
+            // dd($param);
+            $list['title'] = "Pekerjaan";
+            $data['anggota'] = $this->anggota->where('pekerjaan', dekrip($param))->findAll();
+            $data['judul'] = "pekerjaan";
+            return view('admin/laporan/cetak_anggota', $data);
+        } else if (dekrip($setItem) == "golonganDarah") {
+            $param = dekrip($this->request->getGet("darah"));
+            // dd($param);
+            if ($param == "null" || $param == "ALL") {
+                $data['anggota'] = $this->anggota->findAll();
+                $data['darah'] = null;
+            } else {
+                $data['anggota'] = $this->anggota->where('golongan_darah', $param)->findAll();
+                $data['darah'] = $param;
+            }
+            $list['title'] = "Golongan Darah";
+            $data['judul'] = "darah";
+            return view('admin/laporan/cetak_anggota', $data);
+        } else if (dekrip($setItem) == "ulangTahun") {
+            $start = $this->request->getGet("start");
+            $end = $this->request->getGet("end");
+            $anggota = $this->anggota
+                ->select("anggota.*, keluarga.id as keluarga_id, keluarga.alamat, anggota_keluarga.keluarga_id, anggota.nama, wilayah.wilayah, timestampdiff(year,tanggal_lahir,curdate()) as umur")
                 ->join("anggota_keluarga", "anggota_keluarga.anggota_id=anggota.id", "left")
                 ->join("keluarga", "anggota_keluarga.keluarga_id=keluarga.id", "left")
                 ->join("wilayah", "wilayah.id=keluarga.wilayah_id", "left")
-                ->join("kerukunan", "kerukunan.id=keluarga.kerukunan_id", "left")
-                ->where('hubungan_keluarga', "KEPALA KELUARGA")->findAll();
-            return view('admin/laporan/cetak_kepala_keluarga', $data);
+                ->where("DATE_FORMAT(tanggal_lahir, '%m-%d') >= DATE_FORMAT('$start', '%m-%d') AND DATE_FORMAT(tanggal_lahir, '%m-%d') <= DATE_FORMAT('$end', '%m-%d') AND anggota.deleted_at IS NULL")
+                ->findAll();
+            $kepala = $this->anggota
+                ->select("keluarga.*, wilayah.wilayah, anggota.nama")
+                ->join("anggota_keluarga", "anggota_keluarga.anggota_id = anggota.id", "left")
+                ->join("keluarga", "keluarga.id = anggota_keluarga.keluarga_id", "left")
+                ->join("wilayah", "wilayah.id = keluarga.wilayah_id", "left")
+                ->where("hubungan_keluarga", "KEPALA KELUARGA")
+                ->where("keluarga.deleted_at", null)
+                ->findAll();
+            foreach ($anggota as $key => $angg) {
+                foreach ($kepala as $value) {
+                    if ($angg['keluarga_id'] == $value['id']) $anggota[$key]['kepala_keluarga'] = $value['nama'];
+                }
+            }
+            $data['anggota'] = $anggota;
+            $list['title'] = "Ulang Tahun";
+            $data['judul'] = "ultah";
+            $data['dari'] = $start;
+            $data['sampai'] = $end;
+            return view('admin/laporan/cetak_anggota', $data);
         }
     }
 
@@ -484,11 +530,10 @@ class Laporan extends BaseController
         $param = (array) $data = $this->request->getJSON();
         // dd($param);
         $data = $this->anggota
-            ->select("keluarga.*, wilayah.wilayah, kerukunan.kerukunan, anggota.nama")
+            ->select("keluarga.*, wilayah.wilayah, anggota.nama")
             ->join("anggota_keluarga", "anggota_keluarga.anggota_id = anggota.id", "left")
             ->join("keluarga", "keluarga.id = anggota_keluarga.keluarga_id", "left")
             ->join("wilayah", "wilayah.id = keluarga.wilayah_id", "left")
-            ->join("kerukunan", "kerukunan.id = keluarga.kerukunan_id", "left")
             ->where("hubungan_keluarga", "KEPALA KELUARGA")
             ->where("keluarga.deleted_at", null)
             ->findAll();

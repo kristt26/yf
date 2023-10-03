@@ -66,6 +66,7 @@ class Anggota extends BaseController
         try {
             $this->conn->transBegin();
             $value->id = $this->decode->uid();
+            $value->foto = isset($value->berkas) ? $this->decode->decodebase64($value->berkas->base64) : null;
             $this->anggota->insert($value);
             $this->anggotaKeluarga->insert(['keluarga_id' => $value->keluarga_id, 'anggota_id' => $value->id]);
             $this->conn->transCommit();
@@ -81,6 +82,7 @@ class Anggota extends BaseController
         $value = $this->request->getJSON();
         try {
             $this->conn->transBegin();
+            $value->foto = isset($value->berkas) ? $this->decode->decodebase64($value->berkas->base64) : $value->foto;
             $this->anggota->update($value->id, $value);
             $this->conn->transCommit();
             return $this->respond($value);
@@ -108,10 +110,27 @@ class Anggota extends BaseController
     public function getUltah()
     {
         $param = $this->request->getGet();
-        $data = $this->anggota->getUltahWeak(session()->get('jemaat_id'), $param);
-        foreach ($data as $key => $value) {
-            $itemKK = $this->jemaatKk->getKepalaKeluarga(session()->get('jemaat_id'), $value->kk_id);
-            $value->kepala_keluarga = !is_null($itemKK) ? $itemKK->nama : "";
+        $start = $param['start'];
+        $end = $param['end'];
+        $data = $this->anggota
+            ->select("anggota.*, keluarga.id as keluarga_id, keluarga.alamat, anggota_keluarga.keluarga_id, anggota.nama, wilayah.wilayah, timestampdiff(year,tanggal_lahir,curdate()) as umur")
+            ->join("anggota_keluarga", "anggota_keluarga.anggota_id=anggota.id", "left")
+            ->join("keluarga", "anggota_keluarga.keluarga_id=keluarga.id", "left")
+            ->join("wilayah", "wilayah.id=keluarga.wilayah_id", "left")
+            ->where("DATE_FORMAT(tanggal_lahir, '%m-%d') >= DATE_FORMAT('$start', '%m-%d') AND DATE_FORMAT(tanggal_lahir, '%m-%d') <= DATE_FORMAT('$end', '%m-%d') AND anggota.deleted_at IS NULL")
+            ->findAll();
+        $kepala = $this->anggota
+            ->select("keluarga.*, wilayah.wilayah, anggota.nama")
+            ->join("anggota_keluarga", "anggota_keluarga.anggota_id = anggota.id", "left")
+            ->join("keluarga", "keluarga.id = anggota_keluarga.keluarga_id", "left")
+            ->join("wilayah", "wilayah.id = keluarga.wilayah_id", "left")
+            ->where("hubungan_keluarga", "KEPALA KELUARGA")
+            ->where("keluarga.deleted_at", null)
+            ->findAll();
+        foreach ($data as $key => $angg) {
+            foreach ($kepala as $value) {
+                if($angg['keluarga_id']==$value['id']) $data[$key]['kepala_keluarga'] = $value['nama'];
+            }
         }
         return $this->respond($data);
     }
@@ -120,7 +139,7 @@ class Anggota extends BaseController
     {
         $item = $this->request->getGet('darah');
         $param = dekrip($item);
-        if($param=="null" || $param=="ALL") $data = $this->anggota->findAll();
+        if ($param == "null" || $param == "ALL") $data = $this->anggota->findAll();
         else $data = $this->anggota->where("golongan_darah", $param)->findAll();
         return $this->respond($data);
     }

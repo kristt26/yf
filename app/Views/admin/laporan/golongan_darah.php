@@ -4,7 +4,7 @@
     <div class="col-md-12">
         <div class="d-flex justify-content-start mb-3">
             <div class="">
-                <button class="btn btn-primary btn-sm mb-2" id="myButton" ng-click="cetak(darah)" target="_blank"><i class="mdi mdi-file-excel-box"></i> Export</button>
+                <button class="btn btn-primary btn-sm mb-2" id="myButton" ng-click="cetak(darah)" target="_blank"><i class="mdi mdi-printer"></i> Print</button>
             </div>
             <div class="col-md-3">
                 <select class="form-select form-select-sm" ng-model="darah" aria-label="Default select example" style="margin-left: 12px;" ng-change="setDate(darah)">
@@ -18,7 +18,8 @@
                 <thead>
                     <tr>
                     <th>No</th>
-                    <th>NIK</th>
+                    <th>Jenis Identitas</th>
+                    <th>Nomor Identitas</th>
                     <th>Nama</th>
                     <th>Jenis Kelamin</th>
                     <th>TTL</th>
@@ -32,7 +33,8 @@
                 <tbody>
                     <tr ng-repeat="item in datas">
                         <td>{{$index+1}}</td>
-                        <td>{{item.nik}}</td>
+                        <td>{{item.jenis_identitas}}</td>
+                        <td>{{item.nomor_identitas}}</td>
                         <td>{{item.nama}}</td>
                         <td>{{item.gender}}</td>
                         <td>{{item.tempat_lahir + ', ' + item.tanggal_lahir}}</td>

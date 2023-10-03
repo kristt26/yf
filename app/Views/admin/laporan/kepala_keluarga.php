@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-md-2">
             <button class="btn btn-primary btn-sm mb-2" id="myButton" ng-click="cetak(wijk, ksp, statusCetak)"><i class="mdi mdi-printer"></i> Print</button>
-            <button ng-if="statusCetak=='kepala'" class="btn btn-info btn-sm mb-2" id="myButton" ng-click="export(wijk, ksp, statusCetak)"><i class="mdi mdi-file"></i> Export</button>
+            <!-- <button ng-if="statusCetak=='kepala'" class="btn btn-info btn-sm mb-2" id="myButton" ng-click="export(wijk, ksp, statusCetak)"><i class="mdi mdi-file"></i> Export</button> -->
         </div>
 
         <div class="col-md-10">

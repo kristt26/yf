@@ -25,7 +25,7 @@
                         </h4>
                         <a href="<?= base_url('keluarga') ?>">
                             <h2 class="mb-5">
-                            <?= $keluarga?>
+                            <?= $jumlah['keluarga']?>
                             </h2>
                         </a>
                         <!-- <h6 class="card-text">Decreased by 10%</h6> -->
@@ -40,12 +40,37 @@
                         </h4>
                         <a href="<?= base_url('anggota') ?>">
                             <h2 class="mb-5">
-                            <?= $anggota?>
+                            <?= $jumlah['anggota']?>
                             </h2>
                         </a>
                         <!-- <h6 class="card-text">Decreased by 10%</h6> -->
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header"><h4>Daftar Ulang Tahun Hari ini</h4></div>
+            <div class="card-body">
+                <table class="table table bordered">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>Tempat Tanggal Lahir</th>
+                            <th>Umur</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($anggota as $key=>$value):?>
+                            <tr>
+                                <td><?=$key+1?></td>
+                                <td><?=$value->nama?></td>
+                                <td><?=$value->tempat_lahir.", ". $value->tanggal_lahir?></td>
+                                <td><?=$value->umur?></td>
+                            </tr>
+                        <?php endforeach;?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

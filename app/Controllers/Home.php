@@ -25,8 +25,9 @@ class Home extends BaseController
             return redirect()->to(base_url('/login?#'));
             exit();
         } else {
-            $data = $this->conn->query("SELECT (SELECT COUNT(*) FROM keluarga WHERE deleted_at is null) as keluarga, 
+            $data['jumlah'] = $this->conn->query("SELECT (SELECT COUNT(*) FROM keluarga WHERE deleted_at is null) as keluarga, 
             (SELECT COUNT(*) FROM anggota WHERE deleted_at is null) as anggota")->getRowArray();
+            $data['anggota'] = $this->conn->query("SELECT *, timestampdiff(year,tanggal_lahir,curdate()) as umur FROM anggota WHERE DATE_FORMAT(tanggal_lahir, '%m-%d') = DATE_FORMAT(curdate(), '%m-%d') AND deleted_at is null")->getResult();
             return view('home', $data);
         } 
     }

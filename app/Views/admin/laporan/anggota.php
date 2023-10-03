@@ -9,7 +9,8 @@
                 <tr>
                     <th>No</th>
                     <th>Aksi</th>
-                    <th>NIK</th>
+                    <th>Jenis Identitas</th>
+                    <th>Nomor Identitas</th>
                     <th>Nama</th>
                     <th>Jenis Kelamin</th>
                     <th>Tempat Lahir</th>
